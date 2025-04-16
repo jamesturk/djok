@@ -1,19 +1,24 @@
 import environ
+import sys
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
-    BASE_DIR / ".env",
     DEBUG=(bool, False),
 )
 
+
+env.read_env(BASE_DIR / ".env")
+
 # Environment Variables ------
-DEBUG = env("DEBUG")
+DEBUG = env.bool("DEBUG", False)
+
+print("debug", DEBUG)
 
 if DEBUG:
-    SECRET_KEY = env("SECRET_KEY", "needs-to-be-set-in-prod")
+    SECRET_KEY = env.str("SECRET_KEY", "needs-to-be-set-in-prod")
 else:
-    SECRET_KEY = env("SECRET_KEY")
+    SECRET_KEY = env.str("SECRET_KEY")
 
 DATABASES = {"default": env.db()}
 
@@ -22,7 +27,7 @@ ALLOWED_HOSTS = []
 INTERNAL_IPS = ["127.0.0.1"]
 
 # Debug Toolbar
-IS_TESTING = "test" in sys.argv
+IS_TESTING = "test" in sys.argv or "pytest" in sys.argv
 
 
 # Static Settings ------

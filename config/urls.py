@@ -9,4 +9,4 @@ urlpatterns = [
 ]
 
 if settings.DEBUG and not settings.IS_TESTING:
-   urlpatterns +=   debug_toolbar_urls()
+    urlpatterns += debug_toolbar_urls()

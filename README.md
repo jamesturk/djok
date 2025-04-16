@@ -1,3 +1,8 @@
+## Left as An Exercise to the User
+
+- LICENSE
+
+
 ## File System Layout
 
 - config
