@@ -1,34 +1,98 @@
-## Left as An Exercise to the User
+# Django Starter Template
 
-- LICENSE
+This is our opinionated template for starting new Django projects.
 
+It adds a few libraries I use in every Django project with reasonable starting configurations,
+linting/CI rules, and a project layout that has worked for many Django projects.
+
+## License
+
+This project is placed into the public domain ([CC0](https://creativecommons.org/public-domain/cc0/))
+so you may use it however you see fit.
+You can clone this repository, use it as a template, or pick & choose what you like.
+
+Please note that the underlying libraries are under their own (MIT/BSD) licenses.
+
+## Getting Started
+
+If you are using this library as a baseline, there are a few steps you'll need to follow:
+
+1. Replace all instances of "djeff" with your project name.
+2. Add a LICENSE
+3. TODO
+3. run `uv run pre-commit install`
 
 ## File System Layout
 
-- config
-- templates
-- static
-- static/root
-- static/root/robots.txt
+- `config/` - This directory is the Django "project". It contains settings files as well as your root `urls.py`.
+- `static/` - This directory is where you will place your static CSS, images, and JS. Those files will be served via `whitenoise`.
+- `static/root/` - This directory will be served as-is at the root of your application. It is useful for files like `robots.txt` that need to be in a particular place.
+- `static/root/robots.txt` - A default robots.txt is provided that excludes troublesome AI bots. (via https://github.com/ai-robots-txt/ai.robots.txt/blob/main/robots.txt)
+)
+- `templates/` - Django is configured to search this directory for your templates. You can also put templates within `<appdir>/templates/` for any given app, but this layout keeps them all together.
 
 Ignored:
 - _staticfiles
 
-## Projects
+## Tool Choices
 
-### environ
+## Django Plugins/Apps
 
-Configured per instructions, used to set up settings.
+### django-environ
+
+Configure Django projects using environment variables, per [The Twelve-Factor App](https://www.12factor.net).
+
+**We:** Configured per typical instructions & used in `config/settings.py`.
+
+**You:** Ensure any future configurable settings are added as environment variables as seen in that file.
+
+<https://django-environ.readthedocs.io/en/latest/>
 
 ### whitenoise
 
-Configured per instructions.
+Efficiently serve static files alongside your application.
+
+**We:** Configured per typical instructions to be used in conjunction with Django's `staticfiles`.
+
+**You:** Put your static files in `static/` & files that you need served at the root of your domain (like `robots.txt`) in `static/root`.
+
+TODO: document whitenoise Compression setting
+
+<https://whitenoise.readthedocs.io/en/latest/>
 
 ### django-typer
 
-minimal config; done
+Allows writing Django management commands using `typer`.
+
+**We:** Configured per typical instructions.
+
+**You:** Write new management commands as needed using typer.
+
+<https://django-typer.readthedocs.io/en/stable/>
+
+### pytest-django
+
+Allows writing Django tests using simplified `pytest`-style tests. Provides fixtures & other test helpers.
+
+**We:** Configured per typical instructions.
+
+**You:** Write `pytest`-style Django tests. Can run them with `pytest` (or `just test`).
+
+<https://pytest-django.readthedocs.io/en/latest/>
+
+### django-debug-toolbar
+
+Provides an in-browser interface for inspecting Django views.
+
+**We:** Configured per typical instructions, set up to automatically enable when `DEBUG` is true.
+
+**You:** Enjoy increased visibility into database queries, template issues, etc.
+
+<https://django-debug-toolbar.readthedocs.io/en/latest/>
 
 ### django-structlog
+
+Library 
 
 TODO: needs defaults
 
@@ -36,15 +100,6 @@ TODO: needs defaults
 
 Configured for email login.
 
-### pytest-django
+#### Options
 
-???
-
-### django-debug-toolbar
-
-Configured per instructions.
-
-## Options
-
-TODO: whitenoise Compression setting
 TODO: prerolled Auth options
