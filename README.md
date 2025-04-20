@@ -30,6 +30,7 @@ If you are using this library as a baseline, there are a few steps you'll need t
 - `static/root/robots.txt` - A default robots.txt is provided that excludes troublesome AI bots. (via https://github.com/ai-robots-txt/ai.robots.txt/blob/main/robots.txt)
 )
 - `templates/` - Django is configured to search this directory for your templates. You can also put templates within `<appdir>/templates/` for any given app, but this layout keeps them all together.
+- `templates/account/` - For your convinience, the default auth templates provided by `django-allauth`. Replace or modify these.
 
 Additionally, there are two directories that you will see after running your application. These are `.gitignore`d.
 
@@ -113,3 +114,10 @@ Augment's django's built in `auth` with commonly-needed views for signup, email 
 
 **You:** Review settings & ensure that they meet your application's login needs.
 
+## Pre-Configured URLs
+
+- `/djadmin` - [`django.admin`](https://docs.djangoproject.com/en/5.2/ref/contrib/admin/)
+- `/accounts/login`
+- `/accounts/signup`
+- `/accounts/login/code`
+- `/accounts/password/reset`
