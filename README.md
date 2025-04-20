@@ -2,14 +2,14 @@
 
 This is our opinionated template for starting new Django projects.
 
-It adds a few libraries I use in every Django project with reasonable starting configurations,
-linting/CI rules, and a project layout that has worked for many Django projects.
+It adds a few libraries useful for every Django project, with reasonable starting configurations.
+Additionally, the repository has linting/CI rules and a project layout that has worked well for our many Django projects.
 
 ## License
 
-This project is placed into the public domain ([CC0](https://creativecommons.org/public-domain/cc0/))
-so you may use it however you see fit.
-You can clone this repository, use it as a template, or pick & choose what you like.
+This project is placed into the public domain ([CC0](https://creativecommons.org/public-domain/cc0/)) so you may use it however you see fit.
+
+You can clone this repository, use it as a template, or pick & choose what you like. Attribution is appreciated but not required.
 
 Please note that the underlying libraries are under their own (MIT/BSD) licenses.
 
@@ -19,8 +19,9 @@ If you are using this library as a baseline, there are a few steps you'll need t
 
 1. Replace all instances of "djeff" with your project name.
 2. Add a LICENSE
-3. TODO
 3. run `uv run pre-commit install`
+4. Read through the various sections below to familiarize yourself with the setup.
+   A few of the libraries may require additional setup, documented under the **You:** steps below.
 
 ## File System Layout
 
@@ -31,10 +32,17 @@ If you are using this library as a baseline, there are a few steps you'll need t
 )
 - `templates/` - Django is configured to search this directory for your templates. You can also put templates within `<appdir>/templates/` for any given app, but this layout keeps them all together.
 
-Ignored:
-- _staticfiles
+Additionally, there are two directories that you will see after running your application. These are `.gitignore`d.
+
+- `_staticfiles` - Where Django will store the combined static files for serving. Do not modify files in this directory directly, instead modify the copies in `static`.
+- `_logs` - The default destination of the log files, can be modified in `config/settings.py`.
 
 ## Tool Choices
+
+- `ruff` - Ensure code quality.
+- `uv` - Manage packages.
+- `pre-commit` - Enforce repository standards.
+- `just` - Run common tasks.
 
 ## Django Plugins/Apps
 
@@ -55,8 +63,6 @@ Efficiently serve static files alongside your application.
 **We:** Configured per typical instructions to be used in conjunction with Django's `staticfiles`.
 
 **You:** Put your static files in `static/` & files that you need served at the root of your domain (like `robots.txt`) in `static/root`.
-
-TODO: document whitenoise Compression setting
 
 <https://whitenoise.readthedocs.io/en/latest/>
 
@@ -92,14 +98,19 @@ Provides an in-browser interface for inspecting Django views.
 
 ### django-structlog
 
-Library 
+This library integrates [structured logging](https://www.structlog.org/en/stable/) with Django.
 
-TODO: needs defaults
+**We:** Provided default configuration that writes logs to the `logs/` directory.
+
+**You:** Modify the `LOGGING` config to reflect your application's name and desired log levels/types.
+
+<https://django-structlog.readthedocs.io/en/latest/>
 
 ### django-allauth
 
-Configured for email login.
+Augment's django's built in `auth` with commonly-needed views for signup, email confirmation, etc.
 
-#### Options
+**We:** Configured for email login.
 
-TODO: prerolled Auth options
+**You:** Review settings & ensure that they meet your application's login needs.
+
