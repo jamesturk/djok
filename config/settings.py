@@ -3,6 +3,12 @@ import structlog
 import sys
 from pathlib import Path
 
+# Preamble -----
+#
+# This sets some global variables & reads in a `.env` file if present.
+#
+# Do not modify this section.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, False),
@@ -11,19 +17,31 @@ env = environ.Env(
 
 env.read_env(BASE_DIR / ".env")
 
-# Environment Variables ------
+# Environment Variable-Controlled Settings ------
+#
+# DEBUG is read first, and if DEBUG is true
+# then certain settings (below) have defaults.
+#
+# It is recommended you do not change this block,
+# instead opting to interact with these settings via the
+# environ variables.
+#
+# The default settings in DEBUG are suitable for production
+#  (a local SQLite DB, unsafe secret key, and console logged email)
+# but in production all of these should be made explicit.
 DEBUG = env.bool("DEBUG", False)
-
-print("debug", DEBUG)
 
 if DEBUG:
     SECRET_KEY = env.str("SECRET_KEY", "needs-to-be-set-in-prod")
     _DEFAULT_DB = env.db(default="sqlite:///" + str(BASE_DIR / "db.sqlite3"))
+    EMAIL_CONFIG = env.email(default="consolemail://")
 else:
     SECRET_KEY = env.str("SECRET_KEY")
     _DEFAULT_DB = env.db()
-
+    EMAIL_CONFIG = env.email()
 DATABASES = {"default": _DEFAULT_DB}
+vars().update(EMAIL_CONFIG)
+
 
 ALLOWED_HOSTS = []
 INTERNAL_IPS = ["127.0.0.1"]
@@ -33,6 +51,9 @@ IS_TESTING = "test" in sys.argv or "pytest" in sys.argv
 
 
 # Static Settings ------
+#
+# Settings below this point can be modified directly within the file.
+# or, at your option, configured using `env`.
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -61,6 +82,8 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
+# Debug Toolbar needs to be configured after INSTALLED_APPS
+#  recommend leaving this here.
 if DEBUG and not IS_TESTING:
     INSTALLED_APPS += ["debug_toolbar"]
     MIDDLEWARE.insert(
@@ -113,26 +136,44 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+DJOK_AUTH_MODE = "username"
+# DJOK_AUTH_MODE is a setting we introduce to pick between
+#   a few common auth patterns.
+#
+# Things other than 'username' currently experimental.
+#
+# 'username'
+# A username-based email
+#
+# 'email'
 # This configures django-allauth with reasonably secure defaults
 # for an email-based account.
 #
-# TODO: Document other common configurations.
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
+# ''
+#
 ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
-ACCOUNT_LOGIN_BY_CODE_ENABLED = True
-ACCOUNT_LOGIN_METHODS = {"email"}
-ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 ACCOUNT_PRESERVE_USERNAME_CASING = False
-ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
-ACCOUNT_SIGNUP_FORM_HONEYPOT_FIELD = "user_name"
+ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+ACCOUNT_SIGNUP_FORM_HONEYPOT_FIELD = "user_name"  # underscore is fake one
 ACCOUNT_USERNAME_BLACKLIST = ["admin"]
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 # ACCOUNT_SIGNUP_FORM_CLASS = ""
 # ACCOUNT_EMAIL_SUBJECT_PREFIX = "[Site] "
 # ACCOUNT_LOGIN_BY_CODE_REQUIRED = False
 # ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+
+if DJOK_AUTH_MODE == "email":
+    ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+    ACCOUNT_LOGIN_METHODS = {"email"}
+    ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
+    ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+    ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+    ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
+else:  # "username"
+    # ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+    # ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
+    pass
+
 
 # Logging Config ---------
 
@@ -222,4 +263,3 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 # this directory is served at project root (for favicon.ico/robots.txt/etc.)
 WHITENOISE_ROOT = BASE_DIR / "static" / "root"
-

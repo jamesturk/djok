@@ -17,7 +17,7 @@ Please note that the underlying libraries are under their own (MIT/BSD) licenses
 
 If you are using this library as a baseline, there are a few steps you'll need to follow:
 
-1. Replace pyproject.toml "djeff" with your project name.
+1. Replace pyproject.toml "djok" with your project name.
 2. **Recommended:** run `uv run pre-commit install`
 3. Read through the various sections below to familiarize yourself with the setup.
    A few of the libraries may require additional setup, documented under the **You:** steps below.

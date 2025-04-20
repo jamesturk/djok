@@ -1,7 +1,7 @@
 [project]
-name = "djeff"
+name = "djok"
 version = "0.1.0"
-description = "Add your description here"
+description = "An OK starting place for Django projects."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
