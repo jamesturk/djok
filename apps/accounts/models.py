@@ -11,7 +11,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 USERNAME_REQUIRED = settings.DJOK_USER_TYPE == "username"
-EMAIL_REQUIRED = settings.DJOK_USER_TYPE == "email"
+EMAIL_REQUIRED = settings.DJOK_USER_TYPE.startswith("email")
 if not (USERNAME_REQUIRED or EMAIL_REQUIRED):
     raise ValueError("Must set DJOK_USER_TYPE")
 

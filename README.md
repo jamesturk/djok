@@ -124,25 +124,19 @@ This library integrates [structured logging](https://www.structlog.org/en/stable
 
 Augment's django's built in `auth` with commonly-needed views for signup, email confirmation, etc.
 
-**We:** Configured for email login.
+**We:** Provide several configurations.
 
-**You:** Review settings & ensure that they meet your application's login needs.
+**You:** Select one by setting `DJOK_USER_TYPE`.
 
-## Pre-Configured URLs
-
-- `/djadmin` - [`django.admin`](https://docs.djangoproject.com/en/5.2/ref/contrib/admin/)
-- `/accounts/login`
-- `/accounts/signup`
-- `/accounts/login/code`
-- `/accounts/password/reset`
-
-## DJOK_USER_TYPE
+#### DJOK_USER_TYPE
 
 Should be set to either:
 
 - `username` - Standard username/password login w/ optional email.
 - `email` - Standard email/password login, username is set to email.
             Comes with allauth-powered token-based login as well.
+- `email+username` - Email-based with optional username field for display
+                     purposes.
 
 This must be set **before** running initial DB migrations.
 
@@ -155,16 +149,15 @@ just dj migrate
 
 Changing once the application is live will require careful planning and custom data migration.
 
-<!--
-Adding New Types:
+#### DJOK_PASSWORD_PROMPTS
 
-rm db.sqlite3
-rm -rf apps/accounts/migrations/
+Determines how many password prompts are shown.
 
-just createsuperuser
-# visit https://localhost:8000/djadmin/ & login
-# visit https://localhost:8000/accounts/logout/
-# visit https://localhost:8000/accounts/signup/
-# visit https://localhost:8000/accounts/logout/
-# visit https://localhost:8000/accounts/login/
--->
+- 0 - Email/Token based login.
+- 1 - Single password box.
+- 2 - Password box with confirmation.
+
+#### Webauthn
+
+See the comments in `config/settings.py` to enable signup & login via Webauthn.
+

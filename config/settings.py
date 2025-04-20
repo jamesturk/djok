@@ -65,6 +65,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "allauth",
     "allauth.account",
+    # Uncomment for MFA/Webauthn
+    # "allauth.mfa",
     "django_structlog",
     "django_typer",
     "apps.accounts",
@@ -149,7 +151,13 @@ AUTH_PASSWORD_VALIDATORS = [
 #
 # See documentation for explanation of options.
 DJOK_USER_TYPE = "email"
+# DJOK_PASSWORD_PROMPTS determines how many password prompts are shown.
+#  0 - Email/Token based login.
+#  1 - Single password box.
+#  2 - Password box with confirmation.
+DJOK_PASSWORD_PROMPTS = 0
 
+_PASSWORDS = {0: [], 1: ["password1*"], 2: ["password1*", "password2*"]}[DJOK_PASSWORD_PROMPTS]
 
 ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
 ACCOUNT_PRESERVE_USERNAME_CASING = False
@@ -162,17 +170,24 @@ ACCOUNT_USERNAME_BLACKLIST = ["admin"]
 # ACCOUNT_LOGIN_BY_CODE_REQUIRED = False
 # ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
-if DJOK_USER_TYPE == "email":
-    ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+if DJOK_USER_TYPE in ("email", "email+username"):
     ACCOUNT_LOGIN_METHODS = {"email"}
-    ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
     ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
     ACCOUNT_EMAIL_VERIFICATION = "mandatory"
     ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
-else:  # "username"
-    # ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-    # ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
-    pass
+    if DJOK_USER_TYPE == "email":
+        ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+        ACCOUNT_SIGNUP_FIELDS = ["email*"] + _PASSWORDS
+    else:
+        ACCOUNT_USER_MODEL_USERNAME_FIELD = "username"
+        ACCOUNT_SIGNUP_FIELDS = ["email*", "username"] + _PASSWORDS
+
+# Uncomment for Webauthnn
+# MFA_SUPPORTED_TYPES = ["webauthn"]
+# MFA_PASSKEY_LOGIN_ENABLED = True
+# MFA_PASSKEY_SIGNUP_ENABLED = True
+# if DEBUG:
+#     MFA_WEBAUTHN_ALLOW_INSECURE_ORIGIN = True
 
 
 # Logging Config ---------
