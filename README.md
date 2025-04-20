@@ -21,6 +21,9 @@ If you are using this library as a baseline, there are a few steps you'll need t
 2. **Recommended:** run `uv run pre-commit install`
 3. Read through the various sections below to familiarize yourself with the setup.
    A few of the libraries may require additional setup, documented under the **You:** steps below.
+4. Replace this README & the LICENSE file with those appropriate to your project.
+   (**Caution**: Since this repository is licensed CC-0, failure to do so would mean licensing your code in the same way, likely not what you want.)
+5. Before starting, you will need to choose which kind of user account you want. See `DJOK_USER_TYPE` below.
 
 ## File System Layout
 
@@ -121,3 +124,36 @@ Augment's django's built in `auth` with commonly-needed views for signup, email 
 - `/accounts/signup`
 - `/accounts/login/code`
 - `/accounts/password/reset`
+
+## DJOK_USER_TYPE
+
+Should be set to either:
+
+- `username` - Standard username/password login w/ optional email.
+- `email` - Standard email/password login, username is set to email.
+            Comes with allauth-powered token-based login as well.
+
+This must be set **before** running initial DB migrations.
+
+Once set, you can run:
+
+```shell
+just dj makemigrations accounts
+just dj migrate
+```
+
+Changing once the application is live will require careful planning and custom data migration.
+
+<!--
+Adding New Types:
+
+rm db.sqlite3
+rm -rf apps/accounts/migrations/
+
+just createsuperuser
+# visit https://localhost:8000/djadmin/ & login
+# visit https://localhost:8000/accounts/logout/
+# visit https://localhost:8000/accounts/signup/
+# visit https://localhost:8000/accounts/logout/
+# visit https://localhost:8000/accounts/login/
+-->

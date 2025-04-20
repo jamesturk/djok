@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "django_structlog",
     "django_typer",
+    "apps.accounts",
 ]
 
 MIDDLEWARE = [
@@ -116,6 +117,8 @@ USE_TZ = True
 
 # Authentication -----
 
+AUTH_USER_MODEL = "accounts.User"
+
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
@@ -136,21 +139,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-DJOK_AUTH_MODE = "username"
-# DJOK_AUTH_MODE is a setting we introduce to pick between
+# DJOK_USER_TYPE is a setting we introduce to pick between
 #   a few common auth patterns.
 #
-# Things other than 'username' currently experimental.
+# It is also used in accounts/models.py.
 #
-# 'username'
-# A username-based email
+# WARNING: Changing this setting after initial setup can have
+#          data-loss consequences.
 #
-# 'email'
-# This configures django-allauth with reasonably secure defaults
-# for an email-based account.
-#
-# ''
-#
+# See documentation for explanation of options.
+DJOK_USER_TYPE = "email"
+
+
 ACCOUNT_EMAIL_UNKNOWN_ACCOUNTS = False
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 ACCOUNT_LOGIN_BY_CODE_ENABLED = True
@@ -162,7 +162,7 @@ ACCOUNT_USERNAME_BLACKLIST = ["admin"]
 # ACCOUNT_LOGIN_BY_CODE_REQUIRED = False
 # ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
-if DJOK_AUTH_MODE == "email":
+if DJOK_USER_TYPE == "email":
     ACCOUNT_USER_MODEL_USERNAME_FIELD = None
     ACCOUNT_LOGIN_METHODS = {"email"}
     ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
