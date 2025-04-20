@@ -5,15 +5,24 @@ This is our opinionated template for starting new Django projects.
 It adds a few libraries useful for every Django project, with reasonable starting configurations.
 Additionally, the repository has linting/CI rules and a project layout that has worked well for our many Django projects.
 
-## License
+## License & Usage
 
 This project is placed into the public domain ([CC0](https://creativecommons.org/public-domain/cc0/)) so you may use it however you see fit.
 
-You can clone this repository, use it as a template, or pick & choose what you like. Attribution is appreciated but not required.
+You can clone this repository and use it as a template, or pick & choose what you like and copy files as needed.
+
+Attribution is appreciated but not required.
 
 Please note that the underlying libraries are under their own (MIT/BSD) licenses.
 
 ## Getting Started
+
+To make full usage of this you will need to install
+
+- `uv` - <https://docs.astral.sh/uv/getting-started/installation/>
+- `just`
+   - You can run `just` using `uv` if you wish, `uvx --from rust-just just`
+
 
 If you are using this library as a baseline, there are a few steps you'll need to follow:
 
