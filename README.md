@@ -1,4 +1,4 @@
-# Django Starter Template
+# DJOK: Django Starter Template
 
 <https://git.unnamed.computer/jpt/djok>
 
