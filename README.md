@@ -23,7 +23,9 @@ To make full usage of this you will need to install
 
 - `uv` - <https://docs.astral.sh/uv/getting-started/installation/>
 - `just`
-   - You can run `just` using `uv` if you wish, `uvx --from rust-just just`
+   - You can run `just` using `uv` if you wish:
+      - `uvx --from rust-just just` for a one-off run
+      - `uv tool install just` for a permanent installation
 
 
 If you are using this library as a baseline, there are a few steps you'll need to follow:
@@ -153,11 +155,11 @@ Changing once the application is live will require careful planning and custom d
 
 #### DJOK_PASSWORD_PROMPTS
 
-Determines how many password prompts are shown.
+Determines how many password inputs are shown.
 
 - 0 - Email/Token based login.
-- 1 - Single password box.
-- 2 - Password box with confirmation.
+- 1 - Single password input.
+- 2 - Password input with confirmation.
 
 #### Webauthn
 
