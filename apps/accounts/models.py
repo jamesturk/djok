@@ -69,6 +69,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
 
+    def save(self, *args, **kwargs):
+        if EMAIL_REQUIRED and not self.username:
+            self.username = self.email
+        super().save(*args, **kwargs)
+
     def get_short_name(self):
         return self.username
 
