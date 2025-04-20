@@ -142,7 +142,7 @@ DJANGO_STRUCTLOG_USER_ID_FIELD = None
 
 LOGGING = {
     "version": 1,
-    "disable_existing_loggers": False,
+    "disable_existing_loggers": True,
     "formatters": {
         "json_formatter": {
             "()": structlog.stdlib.ProcessorFormatter,
@@ -180,10 +180,13 @@ LOGGING = {
             "handlers": ["console", "flat_line_file", "json_file"],
             "level": "INFO",
         },
-        "djeff": {
-            "handlers": ["console", "flat_line_file", "json_file"],
-            "level": "INFO",
-        },
+        # Modify this to match the name of your application.
+        # to configure different logging for your app vs. Django's
+        # internals.
+        # "YOUR_APP": {
+        #    "handlers": ["console", "flat_line_file", "json_file"],
+        #    "level": "INFO",
+        # },
     },
 }
 
