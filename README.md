@@ -17,16 +17,18 @@ Please note that the underlying libraries are under their own (MIT/BSD) licenses
 
 If you are using this library as a baseline, there are a few steps you'll need to follow:
 
-1. Replace pyproject.toml "djok" with your project name.
-2. **Recommended:** run `uv run pre-commit install`
-3. Read through the various sections below to familiarize yourself with the setup.
+1. Read through the various sections below to familiarize yourself with the setup.
    A few of the libraries may require additional setup, documented under the **You:** steps below.
-4. Replace this README & the LICENSE file with those appropriate to your project.
+2. Before starting, you will need to choose which kind of user account you want. See `DJOK_USER_TYPE` below.
+3. Replace this README & the LICENSE file with those appropriate to your project.
    (**Caution**: Since this repository is licensed CC-0, failure to do so would mean licensing your code in the same way, likely not what you want.)
-5. Before starting, you will need to choose which kind of user account you want. See `DJOK_USER_TYPE` below.
+4. Open pyproject.toml & replace "djok" with your project name.
+5. **Recommended:** run `uv run pre-commit install`
 
 ## File System Layout
 
+- `apps/` - Create your app(s) in this directory.
+- `apps/accounts/` - An app that defines our custom user model, compatible with `allauth` and `django.contrib.admin`.
 - `config/` - This directory is the Django "project". It contains settings files as well as your root `urls.py`.
 - `static/` - This directory is where you will place your static CSS, images, and JS. Those files will be served via `whitenoise`.
 - `static/root/` - This directory will be served as-is at the root of your application. It is useful for files like `robots.txt` that need to be in a particular place.
